@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Booking | TripBridge</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f5f7fa;
+      color: #333;
+      min-height: 100vh;
+    }
+    header {
+      background: linear-gradient(90deg, #0072ff, #00c6ff);
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    header h1 { font-size: 1.8rem; margin: 0; }
+    header nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: 600;
+      transition: opacity 0.3s;
+    }
+    header nav a:hover { opacity: 0.8; }
+
+    .search-section {
+      width: 90%;
+      max-width: 800px;
+      margin: 3rem auto;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      padding: 2rem;
+    }
+    h2, h3 {
+      color: #1d3557;
+      border-bottom: 2px solid #f0f0f0;
+      padding-bottom: 10px;
+      margin-top: 0;
+      font-weight: 700;
+    }
+    .trip-details {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      border-radius: 15px;
+      background: linear-gradient(135deg, #e6f7ff, #cceeff);
+      box-shadow: 0 4px 10px rgba(0,114,255,0.1);
+    }
+    .trip-details p { margin: 0.3rem 0; color: #1d3557; }
+    .trip-details strong { color: #0072ff; }
+
+    .search-form {
+      display: grid;
+      gap: 1.5rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 600px) {
+      .search-form { grid-template-columns: 1fr 1fr; }
+      .search-form .primary-btn { grid-column: 1 / -1; }
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+    }
+    .input-group label { font-weight: 600; margin-bottom: 5px; color: #1d3557; }
+    input {
+      padding: 0.7rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    input:focus {
+      border-color: #0072ff;
+      box-shadow: 0 0 5px rgba(0,114,255,0.3);
+    }
+
+    .primary-btn {
+      background: #4CAF50;
+      border: none;
+      color: white;
+      padding: 0.9rem 2rem;
+      border-radius: 25px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.2s;
+      box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+      margin-top: 1rem;
+    }
+    .primary-btn:hover {
+      background: #43a047;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(76, 175, 80, 0.4);
+    }
+
+    footer {
+      background: #1d3557;
+      color: white;
+      text-align: center;
+      padding: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .modal-message-overlay {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.6);
+      display: flex; justify-content: center; align-items: center;
+      z-index: 2000; opacity: 0; visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    .modal-message-overlay.show { opacity: 1; visibility: visible; }
+    .modal-content {
+      background: white; padding: 30px; border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3); text-align: center;
+      width: 400px; transform: scale(0.9); transition: transform 0.3s;
+    }
+    .modal-message-overlay.show .modal-content { transform: scale(1); }
+    .modal-button {
+      background: #0072ff; color: white; border: none;
+      padding: 10px 20px; border-radius: 20px;
+      margin-top: 20px; cursor: pointer; font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Confirm Your Booking</h1>
+    <nav><a href="home.html">Back to Home</a></nav>
+  </header>
+
+  <section class="search-section">
+    <h2>Your Selected Trip 🎫</h2>
+    <div id="tripDetails" class="trip-details"></div>
+
+    <h3>Enter Passenger Details</h3>
+    <form id="bookingForm" class="search-form">
+      <div class="input-group">
+        <label for="bookName">Full Name</label>
+        <input type="text" id="bookName" placeholder="John Doe" required />
+      </div>
+
+      <div class="input-group">
+        <label for="bookEmail">Email</label>
+        <input type="email" id="bookEmail" placeholder="john.doe@example.com" required />
+      </div>
+
+      <div class="input-group">
+        <label for="bookPhone">Phone</label>
+        <input type="tel" id="bookPhone" placeholder="+91 98765 43210" required />
+      </div>
+
+      <div class="input-group">
+        <label for="bookDate">Travel Date</label>
+        <input type="date" id="bookDate" required />
+      </div>
+
+      <div class="input-group">
+        <label for="bookPassengers">No. of Passengers</label>
+        <input type="number" id="bookPassengers" min="1" value="1" required />
+      </div>
+
+      <div id="passengerDetailsContainer" class="input-group" style="grid-column: 1 / -1;">
+        <!-- Dynamic passenger name & age fields appear here -->
+      </div>
+
+      <div class="input-group" style="grid-column: 1 / -1;">
+        <label for="bookNotes">Special Requests (Optional)</label>
+        <input type="text" id="bookNotes" placeholder="Window seat, dietary needs, etc." />
+      </div>
+
+      <button type="submit" class="primary-btn">Complete Booking & Pay</button>
+    </form>
+  </section>
+
+  <footer><p>© 2025 TripBridge | All Rights Reserved</p></footer>
+
+  <div id="modalMessage" class="modal-message-overlay">
+    <div class="modal-content">
+      <div id="modalIcon" class="modal-icon"></div>
+      <h4 id="modalTitle"></h4>
+      <p id="modalBody"></p>
+      <button id="modalClose" class="modal-button">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const tripDetailsDiv = document.getElementById("tripDetails");
+    const bookingForm = document.getElementById("bookingForm");
+    const modalMessage = document.getElementById("modalMessage");
+    const modalTitle = document.getElementById("modalTitle");
+    const modalBody = document.getElementById("modalBody");
+    const modalIcon = document.getElementById("modalIcon");
+    const modalClose = document.getElementById("modalClose");
+    const passengerContainer = document.getElementById("passengerDetailsContainer");
+    const passengerInput = document.getElementById("bookPassengers");
+
+    // --- Modal function ---
+    function showMessage(icon, title, body, callback = null) {
+      modalIcon.innerHTML = icon;
+      modalTitle.textContent = title;
+      modalBody.textContent = body;
+      modalMessage.classList.add('show');
+      modalClose.onclick = () => {
+        modalMessage.classList.remove('show');
+        if (callback) callback();
+      };
+    }
+
+    // --- Generate passenger fields dynamically ---
+    function updatePassengerFields(count) {
+      passengerContainer.innerHTML = '';
+      for (let i = 1; i <= count; i++) {
+        const div = document.createElement('div');
+        div.classList.add('input-group');
+        div.innerHTML = `
+          <label>Passenger ${i} Name</label>
+          <input type="text" id="passengerName${i}" placeholder="Enter name" required />
+          <label>Passenger ${i} Age</label>
+          <input type="number" id="passengerAge${i}" placeholder="Age" min="0" required />
+        `;
+        passengerContainer.appendChild(div);
+      }
+    }
+
+    passengerInput.addEventListener('input', () => {
+      const count = Math.max(1, parseInt(passengerInput.value));
+      updatePassengerFields(count);
+    });
+
+    // Initial passenger field (for 1 passenger)
+    updatePassengerFields(1);
+
+    // Load trip details from localStorage
+    const route = JSON.parse(localStorage.getItem("selectedRoute"));
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById("bookDate").setAttribute('min', today);
+
+    if (!route || !route.mode) {
+      tripDetailsDiv.innerHTML = "<p class='error'>❌ No trip selected. Please go back to the home page.</p>";
+      bookingForm.style.display = "none";
+    } else {
+      const fromTo = route.mode === 'Hotel' ? `${route.destination}` : `${route.source} ➡️ ${route.destination}`;
+      const routeImage = route.image;
+      tripDetailsDiv.innerHTML = `
+        <img src="${routeImage}" alt="${route.mode}" class="route-image" 
+          onerror="this.onerror=null;this.src='https://placehold.co/800x120/0072ff/fff?text=Trip+to+${route.destination}'">
+        <p><strong>Route:</strong> ${fromTo}</p>
+        <p><strong>Mode:</strong> ${route.mode}</p>
+        <p><strong>Type:</strong> ${route.type}</p>
+        <p><strong>Fare:</strong> ${route.fare}</p>
+        <p><strong>Duration:</strong> ${route.duration}</p>
+      `;
+    }
+
+    // Form submission logic
+    bookingForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+
+      const passengers = parseInt(passengerInput.value);
+      const passengerData = [];
+      for (let i = 1; i <= passengers; i++) {
+        const name = document.getElementById(`passengerName${i}`).value.trim();
+        const age = document.getElementById(`passengerAge${i}`).value.trim();
+        if (!name || !age) {
+          showMessage("⚠️", "Missing Details", `Please fill name and age for passenger ${i}.`);
+          return;
+        }
+        passengerData.push({ name, age });
+      }
+
+      const booking = {
+        ...route,
+        fullName: document.getElementById("bookName").value,
+        email: document.getElementById("bookEmail").value,
+        phone: document.getElementById("bookPhone").value,
+        date: document.getElementById("bookDate").value,
+        passengers,
+        passengerData,
+        bookingId: 'TB' + Date.now()
+      };
+
+      localStorage.removeItem("selectedRoute");
+      localStorage.setItem("latestBooking", JSON.stringify(booking));
+
+      showMessage("✅", "Booking Confirmed!",
+        `Your booking for ${route.destination} with ${passengers} passenger(s) is confirmed.`,
+        () => window.location.href = "home.html"
+      );
+    });
+  </script>
+</body>
+</html>

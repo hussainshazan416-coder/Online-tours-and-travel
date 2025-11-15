@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Welcome to TripBridge | Explore the World</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    /* 🌅 Fullscreen Background Slideshow */
+    body.auth-page {
+      margin: 0;
+      overflow: hidden;
+      font-family: "Poppins", sans-serif;
+      animation: fadeBg 20s infinite alternate;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      position: relative;
+    }
+
+    @keyframes fadeBg {
+      0% { background-image: url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80'); }
+      25% { background-image: url('https://images.unsplash.com/photo-1518684079-3c830dcef090?auto=format&fit=crop&w=1600&q=80'); }
+      50% { background-image: url('https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=1600&q=80'); }
+      75% { background-image: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80'); }
+      100% { background-image: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1600&q=80'); }
+    }
+
+    /* ✨ Glassmorphism Login Card */
+    .auth-container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 3rem;
+      text-align: center;
+      width: 380px;
+      color: white;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      animation: fadeIn 1.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    h1 {
+      color: #FFBF00;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .form-toggle {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .form-toggle button {
+      background: none;
+      border: none;
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      margin: 0 1rem;
+      cursor: pointer;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .form-toggle button.active {
+      color: #FFBF00;
+    }
+
+    .form-toggle button::after {
+      content: "";
+      position: absolute;
+      width: 0%;
+      height: 2px;
+      bottom: -3px;
+      left: 0;
+      background-color: #FFBF00;
+      transition: width 0.3s ease;
+    }
+
+    .form-toggle button.active::after {
+      width: 100%;
+    }
+
+    /* 🧾 Input Styles */
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      font-size: 1rem;
+      transition: background 0.3s;
+    }
+
+    input::placeholder {
+      color: #eee;
+    }
+
+    input:focus {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    /* 🎨 Buttons */
+    .primary-btn {
+      background: linear-gradient(45deg, #ff9f1c, #ffbf00, #ffd60a);
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: bold;
+      width: 100%;
+      transition: all 0.3s ease;
+      margin-top: 10px;
+    }
+
+    .primary-btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 15px rgba(255, 191, 0, 0.5);
+    }
+
+    a {
+      color: #FFBF00;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .skip-link {
+      display: block;
+      margin-top: 2rem;
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .form {
+      display: none;
+    }
+
+    .form.active {
+      display: block;
+      animation: slideUp 0.8s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  </style>
+</head>
+
+<body class="auth-page">
+  <div class="auth-container">
+    <h1>TripBridge</h1>
+    <p>✨ Your Gateway to Incredible Journeys ✨</p>
+
+    <div class="form-toggle">
+      <button id="loginBtn" class="active">Login</button>
+      <button id="signupBtn">Signup</button>
+    </div>
+
+    <!-- Login Form -->
+    <form id="loginForm" class="form active">
+      <input type="email" id="loginEmail" placeholder="Email" required />
+      <input type="password" id="loginPassword" placeholder="Password" required />
+      <button type="submit" class="primary-btn">Login</button>
+      <p>Don't have an account? <a href="#" id="toSignup">Signup</a></p>
+    </form>
+
+    <!-- Signup Form -->
+    <form id="signupForm" class="form">
+      <input type="text" id="signupName" placeholder="Full Name" required />
+      <input type="email" id="signupEmail" placeholder="Email" required />
+      <input type="password" id="signupPassword" placeholder="Password" required />
+      <button type="submit" class="primary-btn">Signup</button>
+      <p>Already have an account? <a href="#" id="toLogin">Login</a></p>
+    </form>
+
+    <a href="home.html" class="skip-link">Skip to Home Page →</a>
+  </div>
+
+  <script>
+    const loginBtn = document.getElementById("loginBtn");
+    const signupBtn = document.getElementById("signupBtn");
+    const loginForm = document.getElementById("loginForm");
+    const signupForm = document.getElementById("signupForm");
+    const toSignup = document.getElementById("toSignup");
+    const toLogin = document.getElementById("toLogin");
+
+    loginBtn.addEventListener("click", () => {
+      loginForm.classList.add("active");
+      signupForm.classList.remove("active");
+      loginBtn.classList.add("active");
+      signupBtn.classList.remove("active");
+    });
+
+    signupBtn.addEventListener("click", () => {
+      signupForm.classList.add("active");
+      loginForm.classList.remove("active");
+      signupBtn.classList.add("active");
+      loginBtn.classList.remove("active");
+    });
+
+    toSignup.addEventListener("click", (e) => {
+      e.preventDefault();
+      signupBtn.click();
+    });
+
+    toLogin.addEventListener("click", (e) => {
+      e.preventDefault();
+      loginBtn.click();
+    });
+
+    // Signup Functionality
+    signupForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("signupName").value;
+      const email = document.getElementById("signupEmail").value;
+      const password = document.getElementById("signupPassword").value;
+
+      if (!name || !email || !password) {
+        alert("Please fill all fields!");
+        return;
+      }
+
+      localStorage.setItem("user", JSON.stringify({ name, email, password }));
+      alert("Signup successful! Please login now.");
+      loginBtn.click();
+      signupForm.reset();
+    });
+
+    // Login Functionality
+    loginForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const email = document.getElementById("loginEmail").value;
+      const password = document.getElementById("loginPassword").value;
+      const storedUser = JSON.parse(localStorage.getItem("user"));
+
+      if (!storedUser) {
+        alert("No user found. Please signup first.");
+        return;
+      }
+
+      if (email === storedUser.email && password === storedUser.password) {
+        alert("Login successful!");
+        window.location.href = "home.html";
+      } else {
+        alert("Invalid credentials. Please try again.");
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TripBridge | Explore India</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f5f7fa;
+      overflow-x: hidden;
+    }
+
+    header {
+      background: linear-gradient(90deg, #0072ff, #00c6ff);
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    header h1 { font-size: 1.8rem; }
+    header nav a {
+      color: white;
+      text-decoration: none;
+      margin-left: 20px;
+      font-weight: 600;
+      transition: opacity 0.3s;
+    }
+    header nav a:hover { opacity: 0.8; }
+
+    .hero {
+      background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.4)), 
+        url('https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1600&q=80') center/cover;
+      color: white;
+      text-align: center;
+      padding: 6rem 1rem;
+      animation: fadeIn 2s ease;
+    }
+    .hero h1 { font-size: 3rem; color: #ffdd57; }
+    .hero p { font-size: 1.3rem; margin-top: 0.5rem; }
+
+    .search-section {
+      background: #fff;
+      width: 90%;
+      max-width: 1100px;
+      margin: -3rem auto 3rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      padding: 2rem;
+      animation: slideUp 1.2s ease;
+    }
+    .tabs {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    .tab {
+      padding: 0.8rem 2rem;
+      border-radius: 30px;
+      background: #f0f0f0;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .tab.active {
+      background: linear-gradient(90deg, #0072ff, #00c6ff);
+      color: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    form {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .input-group {
+      flex: 1 1 200px;
+      display: flex;
+      flex-direction: column;
+    }
+    .input-group label {
+      font-weight: 600;
+      margin-bottom: 5px;
+      color: #333;
+    }
+    select, input {
+      padding: 0.7rem;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 1rem;
+      outline: none;
+      transition: 0.3s;
+    }
+    select:focus, input:focus {
+      border-color: #0072ff;
+      box-shadow: 0 0 5px rgba(0,114,255,0.3);
+    }
+    .fancy-btn {
+      background: linear-gradient(90deg, #0072ff, #00c6ff);
+      border: none;
+      color: white;
+      padding: 0.8rem 2rem;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .fancy-btn:hover { transform: translateY(-3px); }
+
+    .results-box {
+      margin-top: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+    .card {
+      background: linear-gradient(145deg, #ffffff, #f6f9fc);
+      border-radius: 15px;
+      width: 260px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      transition: 0.3s;
+      animation: fadeIn 1.5s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    }
+    .card h3 { margin-bottom: 0.5rem; color: #1d3557; }
+    .card p { margin: 0.3rem 0; color: #333; }
+    .book-btn {
+      margin-top: 1rem;
+      background: #0072ff;
+      color: white;
+      border: none;
+      padding: 0.5rem 1.2rem;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .book-btn:hover { background: #005bcc; }
+
+    footer {
+      background: #1d3557;
+      color: white;
+      text-align: center;
+      padding: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+    @keyframes slideUp { from {transform: translateY(40px); opacity: 0;} to {transform: translateY(0); opacity: 1;} }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>TripBridge</h1>
+    <nav>
+      <a href="#">Home</a>
+      <a href="#">Bookings</a>
+      <a href="index.html" id="logoutBtn">Logout</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Discover India, Your Way 🌏</h1>
+    <p>Book Flights, Trains, Buses, and Hotels with ease and color!</p>
+  </section>
+
+  <section class="search-section">
+    <div class="tabs">
+      <div class="tab active" data-type="flight">✈️ Flights</div>
+      <div class="tab" data-type="train">🚆 Trains</div>
+      <div class="tab" data-type="bus">🚌 Buses</div>
+      <div class="tab" data-type="hotel">🏨 Hotels</div>
+    </div>
+
+    <form id="searchForm">
+      <div class="input-group">
+        <label>Source</label>
+        <select id="source" required>
+          <option value="">Select City</option>
+          <option>Delhi</option><option>Mumbai</option><option>Bangalore</option>
+          <option>Chennai</option><option>Kolkata</option><option>Jaipur</option><option>Goa</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label>Destination</label>
+        <select id="destination" required>
+          <option value="">Select City</option>
+          <option>Agra</option><option>Goa</option><option>Kerala</option><option>Mysore</option>
+          <option>Shimla</option><option>Varanasi</option><option>Kashmir</option>
+        </select>
+      </div>
+
+      <div class="input-group" id="extraOption">
+        <label>Class / Type</label>
+        <select id="optionType" required>
+          <option value="">Select Option</option>
+        </select>
+      </div>
+
+      <button type="submit" class="fancy-btn">Search</button>
+    </form>
+
+    <div id="results" class="results-box"></div>
+  </section>
+
+  <footer>
+    <p>© 2025 TripBridge | All Rights Reserved</p>
+  </footer>
+
+  <script>
+    const tabButtons = document.querySelectorAll(".tab");
+    const optionType = document.getElementById("optionType");
+    const form = document.getElementById("searchForm");
+    const results = document.getElementById("results");
+
+    let activeTab = "flight";
+
+    const flightClasses = ["Economy", "Premium Economy", "Business", "First Class"];
+    const busTypes = ["Regular", "Deluxe", "Sleeper"];
+    const trainTypes = ["1st Class", "2nd Class", "3rd Class"];
+    const hotelTypes = ["Regular Hotel", "3-Star Hotel", "5-Star Hotel"];
+
+    const routes = {
+      flight: [
+        { source: "Delhi", destination: "Goa", class: "Economy", fare: "₹3500", duration: "2 hrs", flightName: "Vistara" },
+        { source: "Delhi", destination: "Agra", class: "Economy", fare: "₹2500", duration: "2 hrs" },
+        { source: "Delhi", destination: "Goa", class: "Business", fare: "₹7200", duration: "2 hrs" },
+        { source: "Mumbai", destination: "Kerala", class: "Premium Economy", fare: "₹4500", duration: "2.5 hrs" },
+        { source: "Chennai", destination: "Varanasi", class: "First Class", fare: "₹8200", duration: "3 hrs" },
+      ],
+      train: [
+        { source: "Delhi", destination: "Shimla", type: "1st Class", fare: "₹1900", duration: "8 hrs" },
+        { source: "Delhi", destination: "Agra", type: "1st Class", fare: "₹1200", duration: "1.5 hrs" },
+        { source: "Delhi", destination: "Shimla", type: "2nd Class", fare: "₹2400", duration: "9 hrs" },
+        { source: "Mumbai", destination: "Goa", type: "3rd Class", fare: "₹2900", duration: "11 hrs" },
+      ],
+      bus: [
+        { source: "Delhi", destination: "Shimla", type: "Regular", fare: "₹600", duration: "6 hrs" },
+        { source: "Delhi", destination: "Agra", type: "Regular", fare: "₹600", duration: "2 hrs" },
+        { source: "Delhi", destination: "Shimla", type: "Deluxe", fare: "₹900", duration: "5.5 hrs" },
+        { source: "Mumbai", destination: "Goa", type: "Sleeper", fare: "₹1200", duration: "9 hrs" },
+      ],
+      hotel: [
+        { destination: "Mumbai", type: "Regular Hotel", price: "₹1500/night" },
+        { destination: "Agra", type: "Regular Hotel", price: "₹1500/night" },
+        { destination: "Delhi", type: "Regular Hotel", price: "₹1500/night" },
+        { destination: "Goa", type: "5-Star Hotel", price: "₹8500/night" },
+        { destination: "Shimla", type: "3-Star Hotel", price: "₹3500/night" },
+        { destination: "Kashmir", type: "5-Star Hotel", price: "₹9500/night" },
+      ]
+    };
+
+    function updateOptionDropdown() {
+      optionType.innerHTML = `<option value="">Select Option</option>`;
+      let arr = [];
+      if (activeTab === "flight") arr = flightClasses;
+      else if (activeTab === "bus") arr = busTypes;
+      else if (activeTab === "train") arr = trainTypes;
+      else arr = hotelTypes;
+
+      arr.forEach(a => {
+        const opt = document.createElement("option");
+        opt.value = a;
+        opt.textContent = a;
+        optionType.appendChild(opt);
+      });
+    }
+
+    tabButtons.forEach(tab => {
+      tab.addEventListener("click", () => {
+        tabButtons.forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        activeTab = tab.dataset.type;
+        updateOptionDropdown();
+      });
+    });
+
+    updateOptionDropdown();
+
+    form.addEventListener("submit", e => {
+      e.preventDefault();
+      const source = document.getElementById("source").value;
+      const destination = document.getElementById("destination").value;
+      const option = optionType.value;
+
+      results.innerHTML = "";
+
+      let data = routes[activeTab];
+      let filtered;
+
+      if (activeTab === "hotel") {
+        filtered = data.filter(r => r.destination === destination && (option === "" || r.type === option));
+      } else {
+        filtered = data.filter(r => r.source === source && r.destination === destination && (option === "" || r.class === option || r.type === option));
+      }
+
+      if (filtered.length === 0) {
+        results.innerHTML = `<p>No ${activeTab} options found for your selection.</p>`;
+        return;
+      }
+
+      filtered.forEach(r => {
+        const card = document.createElement("div");
+        card.classList.add("card");
+
+        if (activeTab === "flight") {
+          card.innerHTML = `<h3>✈️ Flight</h3>
+            <p><strong>${r.source} → ${r.destination}</strong></p>
+            <p>Class: ${r.class}</p>
+            <p>Fare: ${r.fare}</p>
+            <p>Duration: ${r.duration}</p>
+            <button class="book-btn">Book Now</button>`;
+        } else if (activeTab === "train") {
+          card.innerHTML = `<h3>🚆 Train</h3>
+            <p><strong>${r.source} → ${r.destination}</strong></p>
+            <p>Type: ${r.type}</p>
+            <p>Fare: ${r.fare}</p>
+            <p>Duration: ${r.duration}</p>
+            <button class="book-btn">Book Now</button>`;
+        } else if (activeTab === "bus") {
+          card.innerHTML = `<h3>🚌 Bus</h3>
+            <p><strong>${r.source} → ${r.destination}</strong></p>
+            <p>Type: ${r.type}</p>
+            <p>Fare: ${r.fare}</p>
+            <p>Duration: ${r.duration}</p>
+            <button class="book-btn">Book Now</button>`;
+        } else {
+          card.innerHTML = `<h3>🏨 Hotel</h3>
+            <p><strong>${r.destination}</strong></p>
+            <p>Type: ${r.type}</p>
+            <p>Price: ${r.price}</p>
+            <button class="book-btn">Book Now</button>`;
+        }
+
+        results.appendChild(card);
+
+        // ✅ Book Now Button Logic
+        const bookBtn = card.querySelector(".book-btn");
+        bookBtn.addEventListener("click", () => {
+          let routeData;
+
+          if (activeTab === "flight") {
+            routeData = {
+              mode: "Flight",
+              source: r.source,
+              destination: r.destination,
+              type: r.class,
+              fare: r.fare,
+              duration: r.duration,
+              image: `https://placehold.co/600x200?text=Flight+${r.source}+to+${r.destination}`
+            };
+          } else if (activeTab === "train") {
+            routeData = {
+              mode: "Train",
+              source: r.source,
+              destination: r.destination,
+              type: r.type,
+              fare: r.fare,
+              duration: r.duration,
+              image: `https://placehold.co/600x200?text=Train+${r.source}+to+${r.destination}`
+            };
+          } else if (activeTab === "bus") {
+            routeData = {
+              mode: "Bus",
+              source: r.source,
+              destination: r.destination,
+              type: r.type,
+              fare: r.fare,
+              duration: r.duration,
+              image: `https://placehold.co/600x200?text=Bus+${r.source}+to+${r.destination}`
+            };
+          } else {
+            routeData = {
+              mode: "Hotel",
+              destination: r.destination,
+              type: r.type,
+              fare: r.price,
+              duration: "2 nights",
+              image: `https://placehold.co/600x200?text=Hotel+in+${r.destination}`
+            };
+          }
+
+          localStorage.setItem("selectedRoute", JSON.stringify(routeData));
+          window.location.href = "booking.html";
+        });
+      });
+    });
+  </script>
+</body>
+</html>
